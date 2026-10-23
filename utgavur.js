@@ -19,6 +19,8 @@
 const UTGAVUR = [
   { tid: "vetur 2026", heiti: "Kom og rokna – 6 nýggjar bøkur", slag: "", fak: "Støddfrøði · forskúli og grunddeild",
     tekstur: "Seks nýggjar bøkur koma út í Kom og rokna-røðini í desember. Kom og rokna er roknitilfar til forskúlan og grunddeildina, skrivað av Johann Petersen." },
+  { tid: "vetur 2026", heiti: "Nýggi Snar", slag: "Snar", fak: "Allar lærugreinir",
+    tekstur: "Snar, undirvísingarportalurin hjá Námi, kemur í nýggjum líki. Lærarar og næmingar finna temasíður, spøl og amboð til undirvísingina á einum stað." },
   { tid: "vetur 2026", heiti: "Støddfrøðispøl til Rokning 1", slag: "Snar", fak: "Støddfrøði · forskúli og 1. flokkur",
     tekstur: "Spøl til stóra skíggjan í flokkinum, eitt til hvønn kapittul í Rokning 1a og 1b. Flokkurin telur, roknar og kannar skap saman, og lærarin hevur eisini amboð sum terningar, tallinju og stoppur." },
   { tid: "vár 2027", heiti: "Co-teaching", slag: "sBók", fak: "Til lærarar",

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Tíðarlinja</title>
+<title>Útgávur á veg</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -44,7 +44,11 @@
     line-height: 1;
   }
   h1 span { color: var(--reytt); }
-  .undirheiti { margin-top: 12px; font-weight: 300; font-size: 1.05rem; color: var(--gratt); }
+  .inngangur { max-width: 640px; }
+  .undirheiti { margin-top: 14px; font-weight: 300; font-size: 1.05rem; line-height: 1.55; color: var(--tekstur); }
+  .undirheiti + .undirheiti { margin-top: 6px; color: var(--gratt); }
+  .gaetur { margin-top: 10px; font-size: .88rem; font-weight: 300; color: var(--gratt); }
+  .gaetur b { font-weight: 500; color: var(--blatt-ljost); }
   .knottar { display: flex; gap: 10px; flex-shrink: 0; }
   .knottar button {
     height: 44px; min-width: 44px; padding: 0 14px; border-radius: 22px;
@@ -240,9 +244,11 @@
 <div class="topp"></div>
 
 <header>
-  <div>
-    <h1>Tíðarlinja<span>.</span></h1>
-    <p class="undirheiti" id="undirheiti"></p>
+  <div class="inngangur">
+    <h1>Útgávur á veg<span>.</span></h1>
+    <p class="undirheiti">Her fært tú yvirlit yvir nýggjar og komandi útgávur hjá Námi. Á tíðarlinjuni sært tú, hvørjar útgávur eru komnar út, hvørjar eru á veg, og nær tær væntandi koma út.</p>
+    <p class="undirheiti">Vel eina útgávu á tíðarlinjuni fyri at lesa meira um hana og síggja, hvussu langt arbeiðið er komið.</p>
+    <p class="gaetur"><b>Gev gætur:</b> Útgávutíðirnar eru vegleiðandi og kunnu broytast.</p>
     <p class="forklaring" id="forklaring" hidden><span><i></i>Kunngjørt</span><span><i class="meting"></i>Meting</span></p>
   </div>
   <div class="knottar">
@@ -262,7 +268,7 @@
   <section class="lysing" id="lysing" aria-live="polite"></section>
 </main>
 
-<footer><b>Tíðarlinja</b> &middot; Útgávur ávegis &middot; Klikk á eina útgávu, ella brúka pílarnar á knappaborðinum</footer>
+<footer><b>Útgávur á veg</b> &middot; Nám &middot; Brúka pílarnar á knappaborðinum fyri at flyta teg eftir tíðarlinjuni</footer>
 
 <!-- Útgávurnar standa í utgavur.js -->
 <!-- Loaded with a fresh query each time, so edits on GitHub show up without an old cached copy -->
@@ -278,7 +284,6 @@ const lysing = document.getElementById("lysing");
 const utkomid = document.getElementById("utkomid");
 const aftur = document.getElementById("aftur");
 const fram = document.getElementById("fram");
-document.getElementById("undirheiti").textContent = typeof UNDIRHEITI === "string" ? UNDIRHEITI : "Útgávur ávegis";
 
 /* "tid" can be a season ("heyst 2027"), a month ("desember 2026") or just a year ("2028").
    The key orders them: year * 100 + a number for the part of the year. */

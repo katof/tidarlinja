@@ -1,6 +1,6 @@
-# Tíðarlinja
+# Útgávur á veg (Tíðarlinja)
 
-Ein einføld, vatnrøtt tíðarlinja yvir útgávur ávegis, í litunum og stavsniðinum hjá nam.fo.
+Ein einføld, vatnrøtt tíðarlinja yvir nýggjar og komandi útgávur hjá Námi, í litunum og stavsniðinum hjá nam.fo.
 
 **Síðan:** https://katof.github.io/tidarlinja/
 

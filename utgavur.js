@@ -16,7 +16,6 @@
 
    ------------------------------------------------------------------ */
 
-const UNDIRHEITI = "Nýtt tilfar ávegis frá Námi";
 
 const UTGAVUR = [
   { tid: "vetur 2026", heiti: "Kom og rokna – 6 nýggjar bøkur", slag: "", fak: "Støddfrøði · forskúli og grunddeild", stoda: "",

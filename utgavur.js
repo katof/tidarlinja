@@ -25,8 +25,8 @@ const UTGAVUR = [
     tekstur: "sBók um co-teaching, har tveir lærarar undirvísa saman í sama flokki. Bókin snýr seg um, hvussu fólkaskúlin kann gerast meira inkluderandi, og hon viðger leiklutin hjá sernámsfrøðini, fortreytirnar fyri góðum samstarvi, undirvísingardifferentiering, fyrireiking, undirvísingarskipanir og eftirmeting. Væntandi á vári 2027." },
   { tid: "vár 2027", heiti: "Plantur til matna", slag: "Snar", fak: "Temasíða",
     tekstur: "Nýggj temasíða á Snar. Væntandi tíðliga á vári 2027." },
-  { tid: "heyst 2027", heiti: "Jarðfríða", slag: "Snar", fak: "Náttúra og tøkni · 3.–5. flokkur",
-    tekstur: "Temað Jarðfrøði við Jarðfríðu. Næmingarnir fylgja jarðfrøðinginum Jarðfríðu og læra at lesa søguna, sum stendur skrivað í grótinum. Gjørt í samstarvi millum Nám og Jarðfeingi, og kann brúkast saman við GeoSkúla. Væntandi út ímóti heysti 2027." },
+  { tid: "heyst 2027", heiti: "Jarðfrøði við Jarðfríðu", slag: "Snar", fak: "Náttúra og tøkni · 3.–5. flokkur",
+    tekstur: "Næmingarnir fylgja jarðfrøðinginum Jarðfríðu og læra at lesa søguna, sum er skrivað í grótinum. Tilfarið er gjørt í samstarvi millum Nám og Jarðfeingi og kann brúkast saman við GeoSkúla.\nVæntandi kemur tilfarið út móti heysti 2027." },
 
   /* ---- METINGAR: konkret nýtt tilfar, sum Nám ikki hevur kunngjørt enn ---- */
   { tid: "summar 2027", meting: true, heiti: "Enskt 5", slag: "Pappírsbók", fak: "Enskt · 5. flokkur",

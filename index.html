@@ -260,21 +260,34 @@ const aftur = document.getElementById("aftur");
 const fram = document.getElementById("fram");
 document.getElementById("undirheiti").textContent = typeof UNDIRHEITI === "string" ? UNDIRHEITI : "Útgávur ávegis";
 
-function lesDato(s) {
-  const [a, m, d] = String(s).split("-").map(Number);
-  return new Date(a, (m || 1) - 1, d || 1);
+/* "tid" can be a season ("heyst 2027"), a month ("desember 2026") or just a year ("2028").
+   The key orders them: year * 100 + a number for the part of the year. */
+const ARSTIDIR = { "vár": 4, "summar": 7, "heyst": 10, "vetur": 12 };
+function lesTid(s) {
+  const t = String(s || "").toLowerCase().trim();
+  const ar = Number((t.match(/\d{4}/) || [new Date().getFullYear()])[0]);
+  const ord = t.replace(/\d{4}/, "").replace(/[^a-záðíóúýæø]/g, " ").trim().split(/\s+/).pop() || "";
+  if (ord in ARSTIDIR) return { ar, lykil: ar * 100 + ARSTIDIR[ord], ord };
+  const m = MANADIR.indexOf(ord);
+  if (m !== -1) return { ar, lykil: ar * 100 + m + 1, ord };
+  return { ar, lykil: ar * 100 + 6, ord: "" };
 }
+function stort(s) { return s ? s[0].toUpperCase() + s.slice(1) : s; }
+function tidTekstur(u) { return u.t.ord ? stort(u.t.ord) + " " + u.t.ar : String(u.t.ar); }
+
 const idag = new Date();
-const thessiManadur = new Date(idag.getFullYear(), idag.getMonth(), 1);
+const mn = idag.getMonth() + 1;
+const nuLykil = mn <= 2 ? (idag.getFullYear() - 1) * 100 + 12
+  : idag.getFullYear() * 100 + (mn <= 5 ? 4 : mn <= 8 ? 7 : mn <= 11 ? 10 : 12);
 
 const utgavur = (typeof UTGAVUR !== "undefined" ? UTGAVUR : [])
-  .map(u => ({ ...u, d: lesDato(u.dato), dagur: /^\d{4}-\d{1,2}-\d{1,2}$/.test(u.dato) }))
-  .sort((a, b) => a.d - b.d);
+  .map((u, i) => ({ ...u, t: lesTid(u.tid || u.dato), i }))
+  .sort((a, b) => a.t.lykil - b.t.lykil || a.i - b.i);
 
 /* Build the line. The "Í dag" marker goes before the first publication that is not yet out. */
 let virkin = 0;
 let dregur = false, flutti = false, startX = 0, startScroll = 0;
-const fyrstaKomandi = utgavur.findIndex(u => (u.dagur ? u.d >= idag : u.d >= thessiManadur) && u.stoda !== "Útkomin");
+const fyrstaKomandi = utgavur.findIndex(u => u.t.lykil >= nuLykil && u.stoda !== "Útkomin");
 const nuIndex = fyrstaKomandi === -1 ? utgavur.length : fyrstaKomandi;
 let idagLi = null;
 
@@ -283,10 +296,10 @@ const lidir = utgavur.map((u, i) => {
   const li = document.createElement("li");
   if (u.stoda === "Útkomin") li.classList.add("utkomin");
   const b = document.createElement("button");
-  b.setAttribute("aria-label", u.heiti + ", " + manadTekstur(u));
+  b.setAttribute("aria-label", u.heiti + ", " + tidTekstur(u));
   b.innerHTML = '<span class="ar"><b></b><small></small></span><span class="prikkur"></span><span class="heiti"></span><span class="slag"></span>';
-  b.querySelector(".ar b").textContent = u.dagur ? u.d.getDate() + ". " + MANADIR[u.d.getMonth()].slice(0, 3) : MANADIR[u.d.getMonth()].slice(0, 3);
-  b.querySelector(".ar small").textContent = u.d.getFullYear();
+  b.querySelector(".ar b").textContent = u.t.ord || u.t.ar;
+  b.querySelector(".ar small").textContent = u.t.ord ? u.t.ar : "";
   b.querySelector(".heiti").textContent = u.heiti;
   b.querySelector(".slag").textContent = u.slag || "";
   b.addEventListener("click", () => { if (!flutti) vel(i); });
@@ -304,9 +317,6 @@ function merkiIdag() {
   linja.appendChild(li);
   return li;
 }
-function manadTekstur(u) {
-  return (u.dagur ? u.d.getDate() + ". " : "") + MANADIR[u.d.getMonth()] + " " + u.d.getFullYear();
-}
 function midja(li) { return linja.offsetLeft + li.offsetLeft + li.offsetWidth / 2; }
 
 function vel(i, flyt = true) {
@@ -321,14 +331,17 @@ function vel(i, flyt = true) {
 
   lysing.classList.remove("skift");
   lysing.innerHTML = '<div class="tal"></div><h2></h2><div class="fak"></div><p></p><div class="stig"></div>';
-  lysing.querySelector(".tal").textContent = manadTekstur(u) + "  ·  " + (virkin + 1) + " / " + utgavur.length;
+  lysing.querySelector(".tal").textContent = tidTekstur(u) + "  ·  " + (virkin + 1) + " / " + utgavur.length;
   lysing.querySelector("h2").textContent = u.heiti;
-  lysing.querySelector(".fak").textContent = [u.slag, u.fak].filter(Boolean).join("  ·  ");
+  const fak = lysing.querySelector(".fak");
+  const fakTekstur = [u.slag, u.fak].filter(Boolean).join("  ·  ");
+  if (fakTekstur) fak.textContent = fakTekstur; else fak.remove();
   const p = lysing.querySelector("p");
   if (u.tekstur) p.textContent = u.tekstur; else p.remove();
   const stig = lysing.querySelector(".stig");
   const s = STIG.indexOf(u.stoda);
-  STIG.forEach((navn, n) => {
+  if (!u.stoda) stig.remove();
+  else STIG.forEach((navn, n) => {
     const d = document.createElement("div");
     if (n < s) d.className = "gjort";
     if (n === s) d.className = "nu";

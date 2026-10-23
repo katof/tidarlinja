@@ -20,6 +20,8 @@ const UNDIRHEITI = "Útgávur ávegis frá Námi";
 const UTGAVUR = [
   { tid: "vetur 2026", heiti: "Kom og rokna – 6 nýggjar bøkur", slag: "", fak: "Støddfrøði · forskúli og grunddeild", stoda: "",
     tekstur: "Seks nýggjar bøkur koma út í Kom og rokna-røðini í desember. Kom og rokna er roknitilfar til forskúlan og grunddeildina, skrivað av Johann Petersen." },
+  { tid: "vetur 2026", heiti: "Støddfrøðispøl til Rokning 1", slag: "Snar", fak: "Støddfrøði · forskúli og 1. flokkur", stoda: "",
+    tekstur: "Spøl til stóra skíggjan í flokkinum, eitt til hvønn kapittul í Rokning 1a og 1b. Flokkurin telur, roknar og kannar skap saman, og lærarin hevur eisini amboð sum terningar, tallinju og stoppur." },
   { tid: "fyrst í 2027", heiti: "Co-teaching", slag: "sBók", fak: "Til lærarar", stoda: "",
     tekstur: "sBók um co-teaching, har tveir lærarar undirvísa saman í sama flokki. Bókin snýr seg um, hvussu fólkaskúlin kann gerast meira inkluderandi, og hon viðger leiklutin hjá sernámsfrøðini, fortreytirnar fyri góðum samstarvi, undirvísingardifferentiering, fyrireiking, undirvísingarskipanir og eftirmeting. Væntandi fyrst í 2027." },
   { tid: "vár 2027", heiti: "Plantur til matna", slag: "Snar", fak: "Temasíða", stoda: "",

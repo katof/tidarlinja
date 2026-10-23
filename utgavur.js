@@ -19,8 +19,10 @@ const UNDIRHEITI = "Útgávur ávegis frá Námi";
 const UTGAVUR = [
   { dato: "2026-09", heiti: "Dømi: Lesibók 2", slag: "Pappírsbók", fak: "Føroyskt · 2. flokkur", stoda: "Útkomin",
     tekstur: "Lesibók við søgum og yrkingum, og eitt arbeiðshefti afturat." },
-  { dato: "2026-11", heiti: "Dømi: Rokning 2A", slag: "Pappírsbók", fak: "Støddfrøði · 2. flokkur", stoda: "Til prentingar",
-    tekstur: "Uppgávubók við lærarabók á netinum." },
+  { dato: "2026-11", heiti: "Dømi: Lesibók 3", slag: "Pappírsbók", fak: "Føroyskt · 3. flokkur", stoda: "Til prentingar",
+    tekstur: "Lesibók við arbeiðshefti og lærarabók á netinum." },
+  { dato: "2026-12", heiti: "Rokning – 6 nýggjar bøkur", slag: "Pappírsbók", fak: "Støddfrøði · fólkaskúlin", stoda: "",
+    tekstur: "Seks nýggjar bøkur koma út í Rokning-røðini í desember. Rokning er bókaheild til støddfrøði í fólkaskúlanum, og røðin fevnir higartil um Rokning 1 til Rokning 6." },
   { dato: "2026-12", heiti: "Dømi: Jól í Føroyum", slag: "Snar", fak: "Tvørfakligt · 1.–4. flokkur", stoda: "Í umbróti",
     tekstur: "Temasíða við hugskotum, sangum og uppgávum til desember." },
   { dato: "2027-01", heiti: "Dømi: Náttúra og tøkni 5", slag: "i-bók", fak: "Náttúra og tøkni · 5. flokkur", stoda: "Í umbróti",

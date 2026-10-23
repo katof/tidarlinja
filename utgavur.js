@@ -18,8 +18,10 @@
 const UNDIRHEITI = "Útgávur ávegis frá Námi";
 
 const UTGAVUR = [
-  { tid: "vetur 2026", heiti: "Rokning – 6 nýggjar bøkur", slag: "Pappírsbók", fak: "Støddfrøði · fólkaskúlin", stoda: "",
-    tekstur: "Seks nýggjar bøkur koma út í Rokning-røðini í desember. Rokning er bókaheild til støddfrøði í fólkaskúlanum, og røðin fevnir higartil um Rokning 1 til Rokning 6." },
-  { tid: "heyst 2027", heiti: "Jarðfríða", slag: "", fak: "", stoda: "",
-    tekstur: "Væntandi út ímóti heysti 2027." }
+  { tid: "vetur 2026", heiti: "Kom og rokna – 6 nýggjar bøkur", slag: "", fak: "Støddfrøði · forskúli og grunddeild", stoda: "",
+    tekstur: "Seks nýggjar bøkur koma út í Kom og rokna-røðini í desember. Kom og rokna er roknitilfar til forskúlan og grunddeildina, skrivað av Johann Petersen." },
+  { tid: "vár 2027", heiti: "Plantur til matna", slag: "Snar", fak: "Temasíða", stoda: "",
+    tekstur: "Nýggj temasíða á Snar. Væntandi tíðliga á vári 2027." },
+  { tid: "heyst 2027", heiti: "Jarðfríða", slag: "Snar", fak: "Náttúra og tøkni · 3.–5. flokkur", stoda: "",
+    tekstur: "Temað Jarðfrøði við Jarðfríðu. Næmingarnir fylgja jarðfrøðinginum Jarðfríðu og læra at lesa søguna, sum stendur skrivað í grótinum. Gjørt í samstarvi millum Nám og Jarðfeingi, og kann brúkast saman við GeoSkúla. Væntandi út ímóti heysti 2027." }
 ];

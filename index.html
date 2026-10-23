@@ -133,6 +133,11 @@
     letter-spacing: .06em;
     color: var(--blatt-ljost);
   }
+  .post.meting .prikkur { border-style: dashed; border-color: var(--gratt); }
+  .post.meting .heiti { font-style: italic; }
+  .forklaring { margin-top: 10px; font-size: .8rem; color: var(--gratt); display: flex; gap: 16px; align-items: center; }
+  .forklaring i { display: inline-block; width: 11px; height: 11px; border-radius: 50%; border: 2px solid var(--blatt-ljost); margin-right: 6px; vertical-align: -1px; }
+  .forklaring i.meting { border-style: dashed; border-color: var(--gratt); }
   .post.utkomin .prikkur { background: var(--reytt); border-color: var(--reytt); }
   .post:hover .heiti { opacity: 1; }
   .post:hover .prikkur { border-color: var(--blatt); }
@@ -238,6 +243,7 @@
   <div>
     <h1>Tíðarlinja<span>.</span></h1>
     <p class="undirheiti" id="undirheiti"></p>
+    <p class="forklaring" id="forklaring" hidden><span><i></i>Kunngjørt</span><span><i class="meting"></i>Meting</span></p>
   </div>
   <div class="knottar">
     <button class="pil" id="aftur" aria-label="Fyrra útgáva">&#8592;</button>
@@ -327,6 +333,7 @@ const lidir = utgavur.map((u, i) => {
   const li = document.createElement("li");
   li.className = "post";
   if (u.stoda === "Útkomin") li.classList.add("utkomin");
+  if (u.meting) li.classList.add("meting");
   const b = document.createElement("button");
   b.setAttribute("aria-label", u.heiti + ", " + tidTekstur(u));
   b.innerHTML = '<span class="prikkur"></span><span class="heiti"></span><span class="slag"></span>';
@@ -338,6 +345,7 @@ const lidir = utgavur.map((u, i) => {
   return li;
 });
 if (!idagLi) idagLi = merkiIdag();
+if (utgavur.some(u => u.meting)) document.getElementById("forklaring").hidden = false;
 
 function merkiIdag() {
   const li = document.createElement("li");
@@ -365,7 +373,7 @@ function vel(i, flyt = true) {
 
   lysing.classList.remove("skift");
   lysing.innerHTML = '<div class="tal"></div><h2></h2><div class="fak"></div><p></p><div class="stig"></div>';
-  lysing.querySelector(".tal").textContent = tidTekstur(u) + "  ·  " + (virkin + 1) + " / " + utgavur.length;
+  lysing.querySelector(".tal").textContent = tidTekstur(u) + (u.meting ? "  ·  Meting" : "") + "  ·  " + (virkin + 1) + " / " + utgavur.length;
   lysing.querySelector("h2").textContent = u.heiti;
   const fak = lysing.querySelector(".fak");
   const fakTekstur = [u.slag, u.fak].filter(Boolean).join("  ·  ");

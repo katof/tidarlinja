@@ -12,6 +12,7 @@
    fak       lærugrein og/ella flokkur  (kann vera tómt)
    stoda     Ætlað · Í skriving · Í umbróti · Til prentingar · Útkomin  (kann vera tómt)
    tekstur   ein stuttur tekstur  (kann vera tómur: "")
+   meting    true, um útgávan bert er ein meting (ikki staðfest). Hon fær stippaðan prikk.
 
    ------------------------------------------------------------------ */
 
@@ -27,5 +28,21 @@ const UTGAVUR = [
   { tid: "vár 2027", heiti: "Plantur til matna", slag: "Snar", fak: "Temasíða", stoda: "",
     tekstur: "Nýggj temasíða á Snar. Væntandi tíðliga á vári 2027." },
   { tid: "heyst 2027", heiti: "Jarðfríða", slag: "Snar", fak: "Náttúra og tøkni · 3.–5. flokkur", stoda: "",
-    tekstur: "Temað Jarðfrøði við Jarðfríðu. Næmingarnir fylgja jarðfrøðinginum Jarðfríðu og læra at lesa søguna, sum stendur skrivað í grótinum. Gjørt í samstarvi millum Nám og Jarðfeingi, og kann brúkast saman við GeoSkúla. Væntandi út ímóti heysti 2027." }
+    tekstur: "Temað Jarðfrøði við Jarðfríðu. Næmingarnir fylgja jarðfrøðinginum Jarðfríðu og læra at lesa søguna, sum stendur skrivað í grótinum. Gjørt í samstarvi millum Nám og Jarðfeingi, og kann brúkast saman við GeoSkúla. Væntandi út ímóti heysti 2027." },
+
+  /* ---- METINGAR: sannlíkar útgávur, sum Nám ikki hevur kunngjørt ---- */
+  { tid: "vetur 2026", meting: true, heiti: "Holocaustdagurin 2027 – tematilfar", slag: "Snar", fak: "Søga · hádeild og miðnám", stoda: "",
+    tekstur: "Nám hevur gjørt tematilfar á Snar til holocaustdagin 27. januar hvørt ár, seinast í 2026. Tí er sannlíkt, at nýtt tilfar kemur aftur í januar 2027." },
+  { tid: "summar 2027", meting: true, heiti: "Enskt 5", slag: "Pappírsbók", fak: "Enskt · 5. flokkur", stoda: "",
+    tekstur: "Enskt 4 kom út summarið 2025 sum fyrsta bók í nýggjari røð. Søga 4, 5 og 6 komu eisini út ein flokk í senn, so Enskt 5 er ein sannlík næsta bók." },
+  { tid: "summar 2027", meting: true, heiti: "Ferð á føroyskt 2 – 4. kapittul", slag: "Pappírsbók", fak: "Føroyskt sum annaðmál", stoda: "",
+    tekstur: "Í 2024 skrivaði Nám, at 4. kapittul í Ferð á føroyskt 2 er ávegis. Hann er ikki komin út enn." },
+  { tid: "heyst 2027", meting: true, heiti: "Nýtt lesitilfar eftir PISA", slag: "", fak: "Føroyskt · lesing", stoda: "",
+    tekstur: "Eftir PISA 2025 segði Nám, at tað komandi árini fer at leggja enn størri dent á lesing og menna nýtt undirvísingartilfar. Fyrsta tilfarið kemur sannlíkt til skúlaársbyrjan 2027." },
+  { tid: "heyst 2027", meting: true, heiti: "Vitlíki við skili – tilfar til lærarar", slag: "", fak: "Tvørfakligt · lærarar", stoda: "",
+    tekstur: "Vitlíkisstrategiin »Vitlíki við skili« kom í september 2026, og fyrstu lutvísu málini eru sett til 2027. Tilfar og skeið um vitlíki í undirvísingini eru tí sannlík." },
+  { tid: "vár 2028", meting: true, heiti: "Tilfar til nýggju námsætlanirnar í náttúrufrøði", slag: "", fak: "Alisfrøði · evnafrøði · landafrøði · lívfrøði", stoda: "",
+    tekstur: "Dagførdu námsætlanirnar í alisfrøði, evnafrøði, landafrøði og lívfrøði komu í gildi 1. august 2026. Nýtt tilfar fylgir vanliga aftaná." },
+  { tid: "heyst 2028", meting: true, heiti: "Tilfar til týskt, franskt og spanskt", slag: "", fak: "Fremmand mál", stoda: "",
+    tekstur: "Dagførdu námsætlanirnar í týskum, fronskum og spanskum komu í gildi 1. august 2026, so tilfar til hesi mál er ein sannlík uppgáva." }
 ];

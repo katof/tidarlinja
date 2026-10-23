@@ -246,7 +246,8 @@
 <footer><b>Tíðarlinja</b> &middot; Útgávur ávegis &middot; Klikk á eina útgávu, ella brúka pílarnar á knappaborðinum</footer>
 
 <!-- Útgávurnar standa í utgavur.js -->
-<script src="utgavur.js"></script>
+<!-- Loaded with a fresh query each time, so edits on GitHub show up without an old cached copy -->
+<script>document.write('<script src="utgavur.js?v=' + Date.now() + '"><\/script>');</script>
 <script>
 const MANADIR = ["januar", "februar", "mars", "apríl", "mai", "juni", "juli", "august", "september", "oktober", "november", "desember"];
 const STIG = ["Ætlað", "Í skriving", "Í umbróti", "Til prentingar", "Útkomin"];

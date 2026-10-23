@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="fo">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tíðarlinja</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --reytt: #e3274b;
+    --blatt: #1c1e2c;
+    --blatt-ljost: #3d5a80;
+    --tekstur: #2b2b2b;
+    --gratt: #8a8d96;
+    --linja: #e6e6ea;
+    --bakgrund: #ffffff;
+    --kort: #f7f8fa;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: Roboto, system-ui, sans-serif;
+    color: var(--tekstur);
+    background: var(--bakgrund);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .topp { height: 6px; background: var(--reytt); }
+  header {
+    max-width: 1200px; width: 100%;
+    margin: 0 auto;
+    padding: 56px 32px 8px;
+    display: flex; align-items: flex-end; justify-content: space-between; gap: 24px;
+  }
+  h1 {
+    font-weight: 300;
+    font-size: clamp(2.2rem, 5vw, 3.4rem);
+    letter-spacing: -0.02em;
+    color: var(--blatt);
+    line-height: 1;
+  }
+  h1 span { color: var(--reytt); }
+  .undirheiti { margin-top: 12px; font-weight: 300; font-size: 1.05rem; color: var(--gratt); }
+  .knottar { display: flex; gap: 10px; flex-shrink: 0; }
+  .knottar button {
+    height: 44px; min-width: 44px; padding: 0 14px; border-radius: 22px;
+    border: 1px solid var(--linja);
+    background: #fff; color: var(--blatt);
+    font: 400 15px/1 Roboto, sans-serif;
+    cursor: pointer;
+    transition: background .2s, color .2s, border-color .2s;
+  }
+  .knottar button.pil { font-size: 20px; padding: 0; }
+  .knottar button:hover:not(:disabled) { background: var(--blatt); color: #fff; border-color: var(--blatt); }
+  .knottar button:disabled { opacity: .3; cursor: default; }
+  .knottar button:focus-visible { outline: 2px solid var(--reytt); outline-offset: 2px; }
+
+  main { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+  .spor {
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    cursor: grab;
+    padding: 40px 0 24px;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
+    mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
+  }
+  .spor::-webkit-scrollbar { display: none; }
+  .spor.dregur { cursor: grabbing; scroll-behavior: auto; user-select: none; }
+  .ras { position: relative; width: max-content; padding: 0 calc(50vw - 110px); }
+  .ras::before, .utkomid {
+    content: "";
+    position: absolute;
+    left: 0; top: 74px; height: 2px;
+  }
+  .ras::before { right: 0; background: var(--linja); }
+  .utkomid { width: 0; background: var(--reytt); }
+  ol { list-style: none; display: flex; position: relative; }
+  li { width: 220px; flex-shrink: 0; text-align: center; padding: 0 12px; }
+  li button { all: unset; display: block; width: 100%; cursor: pointer; }
+  li button:focus-visible .prikkur { outline: 2px solid var(--blatt); outline-offset: 4px; }
+  .ar {
+    display: block;
+    height: 52px;
+    white-space: nowrap;
+    color: var(--gratt);
+    transition: color .3s, transform .3s;
+  }
+  .ar b { display: block; font-weight: 300; font-size: 2rem; letter-spacing: -0.02em; line-height: 1; }
+  .ar small { display: block; margin-top: 4px; font-size: .78rem; letter-spacing: .12em; }
+  .prikkur {
+    display: block;
+    width: 14px; height: 14px;
+    margin: 15px auto 0;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid var(--blatt-ljost);
+    position: relative; z-index: 1;
+    transition: transform .3s, background .3s, border-color .3s, box-shadow .3s;
+  }
+  .heiti {
+    display: block;
+    margin-top: 22px;
+    font-size: .98rem;
+    line-height: 1.35;
+    opacity: .75;
+    transition: opacity .3s, color .3s;
+  }
+  .slag {
+    display: block;
+    margin-top: 6px;
+    font-size: .78rem;
+    letter-spacing: .06em;
+    color: var(--blatt-ljost);
+  }
+  li.utkomin .prikkur { background: var(--reytt); border-color: var(--reytt); }
+  li:hover .ar { color: var(--blatt); }
+  li:hover .heiti { opacity: 1; }
+  li.virkin .ar { color: var(--reytt); transform: translateY(-4px); }
+  li.virkin .ar b { font-weight: 400; }
+  li.virkin .prikkur {
+    background: var(--reytt); border-color: var(--reytt);
+    transform: scale(1.45);
+    box-shadow: 0 0 0 6px rgba(227, 39, 75, .14);
+  }
+  li.virkin .heiti { opacity: 1; font-weight: 500; color: var(--blatt); }
+
+  /* "Í dag" marker */
+  li.idag { width: 0; padding: 0; position: relative; }
+  li.idag::before {
+    content: "";
+    position: absolute;
+    left: -1px; top: 58px;
+    width: 2px; height: 34px;
+    background: var(--blatt);
+    border-radius: 1px;
+  }
+  li.idag span {
+    position: absolute;
+    left: 0; top: 34px;
+    transform: translateX(-50%);
+    font-size: .68rem;
+    font-weight: 500;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: #fff;
+    background: var(--blatt);
+    padding: 3px 7px;
+    border-radius: 3px;
+  }
+
+  .lysing {
+    max-width: 640px; width: calc(100% - 32px);
+    margin: 8px auto 0;
+    padding: 28px 32px;
+    background: var(--kort);
+    border-left: 3px solid var(--reytt);
+    border-radius: 2px 10px 10px 2px;
+    min-height: 200px;
+  }
+  .lysing .tal {
+    font-size: .8rem;
+    font-weight: 500;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--blatt-ljost);
+  }
+  .lysing h2 { margin-top: 6px; font-weight: 300; font-size: 1.7rem; color: var(--blatt); }
+  .lysing .fak { margin-top: 4px; font-size: .95rem; color: var(--gratt); }
+  .lysing p { margin-top: 12px; font-weight: 300; font-size: 1.05rem; line-height: 1.6; }
+  .stig { display: flex; gap: 6px; margin-top: 18px; }
+  .stig div { flex: 1; min-width: 0; }
+  .stig i { display: block; height: 4px; border-radius: 2px; background: var(--linja); }
+  .stig div.gjort i { background: var(--blatt-ljost); }
+  .stig div.nu i { background: var(--reytt); }
+  .stig small {
+    display: block; margin-top: 6px;
+    font-size: .72rem; color: var(--gratt);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .stig div.nu small { color: var(--reytt); font-weight: 500; }
+  .lysing.skift > * { animation: inn .45s ease both; }
+  .lysing.skift > *:nth-child(2) { animation-delay: .03s; }
+  .lysing.skift > *:nth-child(3) { animation-delay: .06s; }
+  .lysing.skift > *:nth-child(4) { animation-delay: .09s; }
+  .lysing.skift > *:nth-child(5) { animation-delay: .12s; }
+  @keyframes inn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+  footer {
+    margin-top: 56px;
+    background: var(--blatt);
+    color: rgba(255,255,255,.55);
+    font-size: .85rem;
+    font-weight: 300;
+    text-align: center;
+    padding: 18px 16px;
+  }
+  footer b { color: #fff; font-weight: 400; }
+
+  @media (max-width: 640px) {
+    header { padding: 36px 16px 4px; }
+    .knottar { display: none; }
+    li { width: 170px; }
+    .ras { padding: 0 calc(50vw - 85px); }
+    .ar b { font-size: 1.6rem; }
+    .lysing { padding: 22px 20px; }
+    .lysing h2 { font-size: 1.4rem; }
+    .stig small { font-size: .62rem; white-space: normal; overflow: visible; line-height: 1.25; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+  }
+</style>
+</head>
+<body>
+<div class="topp"></div>
+
+<header>
+  <div>
+    <h1>Tíðarlinja<span>.</span></h1>
+    <p class="undirheiti" id="undirheiti"></p>
+  </div>
+  <div class="knottar">
+    <button class="pil" id="aftur" aria-label="Fyrra útgáva">&#8592;</button>
+    <button id="idag">Í dag</button>
+    <button class="pil" id="fram" aria-label="Næsta útgáva">&#8594;</button>
+  </div>
+</header>
+
+<main>
+  <div class="spor" id="spor">
+    <div class="ras" id="ras">
+      <div class="utkomid" id="utkomid"></div>
+      <ol id="linja"></ol>
+    </div>
+  </div>
+  <section class="lysing" id="lysing" aria-live="polite"></section>
+</main>
+
+<footer><b>Tíðarlinja</b> &middot; Útgávur ávegis &middot; Klikk á eina útgávu, ella brúka pílarnar á knappaborðinum</footer>
+
+<!-- Útgávurnar standa í utgavur.js -->
+<script src="utgavur.js"></script>
+<script>
+const MANADIR = ["januar", "februar", "mars", "apríl", "mai", "juni", "juli", "august", "september", "oktober", "november", "desember"];
+const STIG = ["Ætlað", "Í skriving", "Í umbróti", "Til prentingar", "Útkomin"];
+
+const linja = document.getElementById("linja");
+const ras = document.getElementById("ras");
+const spor = document.getElementById("spor");
+const lysing = document.getElementById("lysing");
+const utkomid = document.getElementById("utkomid");
+const aftur = document.getElementById("aftur");
+const fram = document.getElementById("fram");
+document.getElementById("undirheiti").textContent = typeof UNDIRHEITI === "string" ? UNDIRHEITI : "Útgávur ávegis";
+
+function lesDato(s) {
+  const [a, m, d] = String(s).split("-").map(Number);
+  return new Date(a, (m || 1) - 1, d || 1);
+}
+const idag = new Date();
+const thessiManadur = new Date(idag.getFullYear(), idag.getMonth(), 1);
+
+const utgavur = (typeof UTGAVUR !== "undefined" ? UTGAVUR : [])
+  .map(u => ({ ...u, d: lesDato(u.dato), dagur: /^\d{4}-\d{1,2}-\d{1,2}$/.test(u.dato) }))
+  .sort((a, b) => a.d - b.d);
+
+/* Build the line. The "Í dag" marker goes before the first publication that is not yet out. */
+let virkin = 0;
+let dregur = false, flutti = false, startX = 0, startScroll = 0;
+const fyrstaKomandi = utgavur.findIndex(u => (u.dagur ? u.d >= idag : u.d >= thessiManadur) && u.stoda !== "Útkomin");
+const nuIndex = fyrstaKomandi === -1 ? utgavur.length : fyrstaKomandi;
+let idagLi = null;
+
+const lidir = utgavur.map((u, i) => {
+  if (i === nuIndex) { idagLi = merkiIdag(); }
+  const li = document.createElement("li");
+  if (u.stoda === "Útkomin") li.classList.add("utkomin");
+  const b = document.createElement("button");
+  b.setAttribute("aria-label", u.heiti + ", " + manadTekstur(u));
+  b.innerHTML = '<span class="ar"><b></b><small></small></span><span class="prikkur"></span><span class="heiti"></span><span class="slag"></span>';
+  b.querySelector(".ar b").textContent = u.dagur ? u.d.getDate() + ". " + MANADIR[u.d.getMonth()].slice(0, 3) : MANADIR[u.d.getMonth()].slice(0, 3);
+  b.querySelector(".ar small").textContent = u.d.getFullYear();
+  b.querySelector(".heiti").textContent = u.heiti;
+  b.querySelector(".slag").textContent = u.slag || "";
+  b.addEventListener("click", () => { if (!flutti) vel(i); });
+  li.appendChild(b);
+  linja.appendChild(li);
+  return li;
+});
+if (!idagLi) idagLi = merkiIdag();
+
+function merkiIdag() {
+  const li = document.createElement("li");
+  li.className = "idag";
+  li.setAttribute("aria-hidden", "true");
+  li.innerHTML = "<span>Í dag</span>";
+  linja.appendChild(li);
+  return li;
+}
+function manadTekstur(u) {
+  return (u.dagur ? u.d.getDate() + ". " : "") + MANADIR[u.d.getMonth()] + " " + u.d.getFullYear();
+}
+function midja(li) { return linja.offsetLeft + li.offsetLeft + li.offsetWidth / 2; }
+
+function vel(i, flyt = true) {
+  if (!utgavur.length) {
+    lysing.innerHTML = "<h2>Ongar útgávur enn</h2><p>Legg útgávur aftrat í fíluni utgavur.js.</p>";
+    return;
+  }
+  virkin = Math.max(0, Math.min(utgavur.length - 1, i));
+  lidir.forEach((li, n) => li.classList.toggle("virkin", n === virkin));
+  const li = lidir[virkin];
+  const u = utgavur[virkin];
+
+  lysing.classList.remove("skift");
+  lysing.innerHTML = '<div class="tal"></div><h2></h2><div class="fak"></div><p></p><div class="stig"></div>';
+  lysing.querySelector(".tal").textContent = manadTekstur(u) + "  ·  " + (virkin + 1) + " / " + utgavur.length;
+  lysing.querySelector("h2").textContent = u.heiti;
+  lysing.querySelector(".fak").textContent = [u.slag, u.fak].filter(Boolean).join("  ·  ");
+  const p = lysing.querySelector("p");
+  if (u.tekstur) p.textContent = u.tekstur; else p.remove();
+  const stig = lysing.querySelector(".stig");
+  const s = STIG.indexOf(u.stoda);
+  STIG.forEach((navn, n) => {
+    const d = document.createElement("div");
+    if (n < s) d.className = "gjort";
+    if (n === s) d.className = "nu";
+    d.innerHTML = "<i></i><small></small>";
+    d.querySelector("small").textContent = navn;
+    stig.appendChild(d);
+  });
+  if (s === -1 && u.stoda) {
+    const d = document.createElement("div");
+    d.className = "nu";
+    d.innerHTML = "<i></i><small></small>";
+    d.querySelector("small").textContent = u.stoda;
+    stig.appendChild(d);
+  }
+  void lysing.offsetWidth;
+  lysing.classList.add("skift");
+
+  aftur.disabled = virkin === 0;
+  fram.disabled = virkin === utgavur.length - 1;
+  if (flyt) spor.scrollLeft = midja(li) - spor.clientWidth / 2;
+}
+
+function teknaUtkomid() { utkomid.style.width = midja(idagLi) + "px"; }
+
+aftur.addEventListener("click", () => vel(virkin - 1));
+fram.addEventListener("click", () => vel(virkin + 1));
+document.getElementById("idag").addEventListener("click", () => vel(Math.min(nuIndex, utgavur.length - 1)));
+document.addEventListener("keydown", e => {
+  if (e.key === "ArrowRight") { vel(virkin + 1); e.preventDefault(); }
+  if (e.key === "ArrowLeft") { vel(virkin - 1); e.preventDefault(); }
+  if (e.key === "Home") vel(0);
+  if (e.key === "End") vel(utgavur.length - 1);
+});
+
+/* Drag sideways with the mouse */
+spor.addEventListener("pointerdown", e => {
+  if (e.pointerType !== "mouse") return;
+  dregur = true; flutti = false; startX = e.clientX; startScroll = spor.scrollLeft;
+});
+window.addEventListener("pointermove", e => {
+  if (!dregur) return;
+  const dx = e.clientX - startX;
+  if (Math.abs(dx) > 4) { flutti = true; spor.classList.add("dregur"); }
+  spor.scrollLeft = startScroll - dx;
+});
+window.addEventListener("pointerup", () => {
+  dregur = false; spor.classList.remove("dregur");
+  setTimeout(() => { flutti = false; }, 0);
+});
+/* Mouse wheel scrolls sideways */
+spor.addEventListener("wheel", e => {
+  if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) { spor.scrollLeft += e.deltaY; e.preventDefault(); }
+}, { passive: false });
+window.addEventListener("resize", () => { teknaUtkomid(); vel(virkin); });
+
+teknaUtkomid();
+vel(Math.min(nuIndex, utgavur.length - 1));
+</script>
+</body>
+</html>

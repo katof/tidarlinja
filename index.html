@@ -76,23 +76,38 @@
   .ras::before, .utkomid {
     content: "";
     position: absolute;
-    left: 0; top: 74px; height: 2px;
+    left: 0; top: 90px; height: 2px;
   }
   .ras::before { right: 0; background: var(--linja); }
   .utkomid { width: 0; background: var(--reytt); }
-  ol { list-style: none; display: flex; position: relative; }
-  li { width: 220px; flex-shrink: 0; text-align: center; padding: 0 12px; }
-  li button { all: unset; display: block; width: 100%; cursor: pointer; }
-  li button:focus-visible .prikkur { outline: 2px solid var(--blatt); outline-offset: 4px; }
+  ol { list-style: none; display: flex; gap: 14px; position: relative; }
+
+  /* One area per season */
+  .flokkur {
+    flex-shrink: 0;
+    padding: 16px 6px 20px;
+    border-radius: 16px;
+    background: rgba(61, 90, 128, .05);
+    text-align: center;
+    transition: background .3s;
+  }
+  .flokkur.virkin { background: rgba(227, 39, 75, .05); }
   .ar {
     display: block;
     height: 52px;
     white-space: nowrap;
     color: var(--gratt);
-    transition: color .3s, transform .3s;
+    transition: color .3s;
   }
   .ar b { display: block; font-weight: 300; font-size: 2rem; letter-spacing: -0.02em; line-height: 1; }
   .ar small { display: block; margin-top: 4px; font-size: .78rem; letter-spacing: .12em; }
+  .flokkur.virkin .ar { color: var(--reytt); }
+  .flokkur.virkin .ar b { font-weight: 400; }
+  .flokkur ul { list-style: none; display: flex; }
+
+  .post { width: 200px; padding: 0 10px; }
+  .post button { all: unset; display: block; width: 100%; cursor: pointer; }
+  .post button:focus-visible .prikkur { outline: 2px solid var(--blatt); outline-offset: 4px; }
   .prikkur {
     display: block;
     width: 14px; height: 14px;
@@ -118,31 +133,29 @@
     letter-spacing: .06em;
     color: var(--blatt-ljost);
   }
-  li.utkomin .prikkur { background: var(--reytt); border-color: var(--reytt); }
-  li:hover .ar { color: var(--blatt); }
-  li:hover .heiti { opacity: 1; }
-  li.virkin .ar { color: var(--reytt); transform: translateY(-4px); }
-  li.virkin .ar b { font-weight: 400; }
-  li.virkin .prikkur {
+  .post.utkomin .prikkur { background: var(--reytt); border-color: var(--reytt); }
+  .post:hover .heiti { opacity: 1; }
+  .post:hover .prikkur { border-color: var(--blatt); }
+  .post.virkin .prikkur {
     background: var(--reytt); border-color: var(--reytt);
     transform: scale(1.45);
     box-shadow: 0 0 0 6px rgba(227, 39, 75, .14);
   }
-  li.virkin .heiti { opacity: 1; font-weight: 500; color: var(--blatt); }
+  .post.virkin .heiti { opacity: 1; font-weight: 500; color: var(--blatt); }
 
-  /* "Í dag" marker */
-  li.idag { width: 0; padding: 0; position: relative; }
+  /* "Í dag" marker, between two season areas */
+  li.idag { width: 0; flex-shrink: 0; position: relative; }
   li.idag::before {
     content: "";
     position: absolute;
-    left: -1px; top: 58px;
+    left: -1px; top: 74px;
     width: 2px; height: 34px;
     background: var(--blatt);
     border-radius: 1px;
   }
   li.idag span {
     position: absolute;
-    left: 0; top: 34px;
+    left: 0; top: 50px;
     transform: translateX(-50%);
     font-size: .68rem;
     font-weight: 500;
@@ -206,8 +219,8 @@
   @media (max-width: 640px) {
     header { padding: 36px 16px 4px; }
     .knottar { display: none; }
-    li { width: 170px; }
-    .ras { padding: 0 calc(50vw - 85px); }
+    .post { width: 160px; }
+    .ras { padding: 0 calc(50vw - 86px); }
     .ar b { font-size: 1.6rem; }
     .lysing { padding: 22px 20px; }
     .lysing h2 { font-size: 1.4rem; }
@@ -287,27 +300,41 @@ const utgavur = (typeof UTGAVUR !== "undefined" ? UTGAVUR : [])
   .map((u, i) => ({ ...u, t: lesTid(u.tid || u.dato), i }))
   .sort((a, b) => a.t.lykil - b.t.lykil || a.i - b.i);
 
-/* Build the line. The "Í dag" marker goes before the first publication that is not yet out. */
+/* Build the line: one area (li.flokkur) per season, with the publications inside it.
+   The "Í dag" marker goes before the season area of the first publication that is not yet out. */
 let virkin = 0;
 let dregur = false, flutti = false, startX = 0, startScroll = 0;
 const fyrstaKomandi = utgavur.findIndex(u => u.t.lykil >= nuLykil && u.stoda !== "Útkomin");
 const nuIndex = fyrstaKomandi === -1 ? utgavur.length : fyrstaKomandi;
 let idagLi = null;
+const flokkar = [];
+const flokkurAv = [];
 
 const lidir = utgavur.map((u, i) => {
-  if (i === nuIndex) { idagLi = merkiIdag(); }
+  let f = flokkar[flokkar.length - 1];
+  if (!f || f.lykil !== u.t.lykil) {
+    if (!idagLi && i >= nuIndex) idagLi = merkiIdag();
+    const fli = document.createElement("li");
+    fli.className = "flokkur";
+    fli.innerHTML = '<span class="ar"><b></b><small></small></span><ul></ul>';
+    fli.querySelector(".ar b").textContent = u.t.ord || u.t.ar;
+    fli.querySelector(".ar small").textContent = u.t.ord ? u.t.ar : "";
+    linja.appendChild(fli);
+    f = { lykil: u.t.lykil, li: fli, ul: fli.querySelector("ul") };
+    flokkar.push(f);
+  }
+  flokkurAv.push(f.li);
   const li = document.createElement("li");
+  li.className = "post";
   if (u.stoda === "Útkomin") li.classList.add("utkomin");
   const b = document.createElement("button");
   b.setAttribute("aria-label", u.heiti + ", " + tidTekstur(u));
-  b.innerHTML = '<span class="ar"><b></b><small></small></span><span class="prikkur"></span><span class="heiti"></span><span class="slag"></span>';
-  b.querySelector(".ar b").textContent = u.t.ord || u.t.ar;
-  b.querySelector(".ar small").textContent = u.t.ord ? u.t.ar : "";
+  b.innerHTML = '<span class="prikkur"></span><span class="heiti"></span><span class="slag"></span>';
   b.querySelector(".heiti").textContent = u.heiti;
   b.querySelector(".slag").textContent = u.slag || "";
   b.addEventListener("click", () => { if (!flutti) vel(i); });
   li.appendChild(b);
-  linja.appendChild(li);
+  f.ul.appendChild(li);
   return li;
 });
 if (!idagLi) idagLi = merkiIdag();
@@ -320,7 +347,10 @@ function merkiIdag() {
   linja.appendChild(li);
   return li;
 }
-function midja(li) { return linja.offsetLeft + li.offsetLeft + li.offsetWidth / 2; }
+function midja(el) {
+  const r = el.getBoundingClientRect(), R = ras.getBoundingClientRect();
+  return r.left - R.left + r.width / 2;
+}
 
 function vel(i, flyt = true) {
   if (!utgavur.length) {
@@ -329,6 +359,7 @@ function vel(i, flyt = true) {
   }
   virkin = Math.max(0, Math.min(utgavur.length - 1, i));
   lidir.forEach((li, n) => li.classList.toggle("virkin", n === virkin));
+  flokkar.forEach(f => f.li.classList.toggle("virkin", f.li === flokkurAv[virkin]));
   const li = lidir[virkin];
   const u = utgavur[virkin];
 

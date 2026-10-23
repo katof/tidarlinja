@@ -267,6 +267,7 @@ const ARSTIDIR = { "vár": 4, "summar": 7, "heyst": 10, "vetur": 12 };
 function lesTid(s) {
   const t = String(s || "").toLowerCase().trim();
   const ar = Number((t.match(/\d{4}/) || [new Date().getFullYear()])[0]);
+  if (/\bfyrst\b|\bbyrjan/.test(t)) return { ar, lykil: ar * 100 + 1, ord: "fyrst í" };
   const ord = t.replace(/\d{4}/, "").replace(/[^a-záðíóúýæø]/g, " ").trim().split(/\s+/).pop() || "";
   if (ord in ARSTIDIR) return { ar, lykil: ar * 100 + ARSTIDIR[ord], ord };
   const m = MANADIR.indexOf(ord);

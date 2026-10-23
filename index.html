@@ -142,7 +142,6 @@
   .forklaring { margin-top: 10px; font-size: .8rem; color: var(--gratt); display: flex; gap: 16px; align-items: center; }
   .forklaring i { display: inline-block; width: 11px; height: 11px; border-radius: 50%; border: 2px solid var(--blatt-ljost); margin-right: 6px; vertical-align: -1px; }
   .forklaring i.meting { border-style: dashed; border-color: var(--gratt); }
-  .post.utkomin .prikkur { background: var(--reytt); border-color: var(--reytt); }
   .post:hover .heiti { opacity: 1; }
   .post:hover .prikkur { border-color: var(--blatt); }
   .post.virkin .prikkur {
@@ -196,17 +195,6 @@
   .lysing h2 { margin-top: 6px; font-weight: 300; font-size: 1.7rem; color: var(--blatt); }
   .lysing .fak { margin-top: 4px; font-size: .95rem; color: var(--gratt); }
   .lysing p { margin-top: 12px; font-weight: 300; font-size: 1.05rem; line-height: 1.6; }
-  .stig { display: flex; gap: 6px; margin-top: 18px; }
-  .stig div { flex: 1; min-width: 0; }
-  .stig i { display: block; height: 4px; border-radius: 2px; background: var(--linja); }
-  .stig div.gjort i { background: var(--blatt-ljost); }
-  .stig div.nu i { background: var(--reytt); }
-  .stig small {
-    display: block; margin-top: 6px;
-    font-size: .72rem; color: var(--gratt);
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  }
-  .stig div.nu small { color: var(--reytt); font-weight: 500; }
   .lysing.skift > * { animation: inn .45s ease both; }
   .lysing.skift > *:nth-child(2) { animation-delay: .03s; }
   .lysing.skift > *:nth-child(3) { animation-delay: .06s; }
@@ -233,7 +221,6 @@
     .ar b { font-size: 1.6rem; }
     .lysing { padding: 22px 20px; }
     .lysing h2 { font-size: 1.4rem; }
-    .stig small { font-size: .62rem; white-space: normal; overflow: visible; line-height: 1.25; }
   }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
@@ -247,7 +234,7 @@
   <div class="inngangur">
     <h1>Útgávur á veg<span>.</span></h1>
     <p class="undirheiti">Her fært tú yvirlit yvir nýggjar og komandi útgávur hjá Námi. Á tíðarlinjuni sært tú, hvørjar útgávur eru komnar út, hvørjar eru á veg, og nær tær væntandi koma út.</p>
-    <p class="undirheiti">Vel eina útgávu á tíðarlinjuni fyri at lesa meira um hana og síggja, hvussu langt arbeiðið er komið.</p>
+    <p class="undirheiti">Vel eina útgávu á tíðarlinjuni fyri at lesa meira um hana.</p>
     <p class="gaetur"><b>Gev gætur:</b> Útgávutíðirnar eru vegleiðandi og kunnu broytast.</p>
     <p class="forklaring" id="forklaring" hidden><span><i></i>Kunngjørt</span><span><i class="meting"></i>Meting</span></p>
   </div>
@@ -275,7 +262,6 @@
 <script>document.write('<script src="utgavur.js?v=' + Date.now() + '"><\/script>');</script>
 <script>
 const MANADIR = ["januar", "februar", "mars", "apríl", "mai", "juni", "juli", "august", "september", "oktober", "november", "desember"];
-const STIG = ["Ætlað", "Í skriving", "Í umbróti", "Klárt til útgávu", "Útkomin"];
 
 const linja = document.getElementById("linja");
 const ras = document.getElementById("ras");
@@ -315,7 +301,7 @@ const utgavur = (typeof UTGAVUR !== "undefined" ? UTGAVUR : [])
    The "Í dag" marker goes before the season area of the first publication that is not yet out. */
 let virkin = 0;
 let dregur = false, flutti = false, startX = 0, startScroll = 0;
-const fyrstaKomandi = utgavur.findIndex(u => u.t.lykil >= nuLykil && u.stoda !== "Útkomin");
+const fyrstaKomandi = utgavur.findIndex(u => u.t.lykil >= nuLykil);
 const nuIndex = fyrstaKomandi === -1 ? utgavur.length : fyrstaKomandi;
 let idagLi = null;
 const flokkar = [];
@@ -337,7 +323,6 @@ const lidir = utgavur.map((u, i) => {
   flokkurAv.push(f.li);
   const li = document.createElement("li");
   li.className = "post";
-  if (u.stoda === "Útkomin") li.classList.add("utkomin");
   if (u.meting) li.classList.add("meting");
   const b = document.createElement("button");
   b.setAttribute("aria-label", u.heiti + ", " + tidTekstur(u));
@@ -377,7 +362,7 @@ function vel(i, flyt = true) {
   const u = utgavur[virkin];
 
   lysing.classList.remove("skift");
-  lysing.innerHTML = '<div class="tal"></div><h2></h2><div class="fak"></div><p></p><div class="stig"></div>';
+  lysing.innerHTML = '<div class="tal"></div><h2></h2><div class="fak"></div><p></p>';
   lysing.querySelector(".tal").textContent = tidTekstur(u) + (u.meting ? "  ·  Meting" : "") + "  ·  " + (virkin + 1) + " / " + utgavur.length;
   lysing.querySelector("h2").textContent = u.heiti;
   const fak = lysing.querySelector(".fak");
@@ -385,24 +370,6 @@ function vel(i, flyt = true) {
   if (fakTekstur) fak.textContent = fakTekstur; else fak.remove();
   const p = lysing.querySelector("p");
   if (u.tekstur) p.textContent = u.tekstur; else p.remove();
-  const stig = lysing.querySelector(".stig");
-  const s = STIG.indexOf(u.stoda);
-  if (!u.stoda) stig.remove();
-  else STIG.forEach((navn, n) => {
-    const d = document.createElement("div");
-    if (n < s) d.className = "gjort";
-    if (n === s) d.className = "nu";
-    d.innerHTML = "<i></i><small></small>";
-    d.querySelector("small").textContent = navn;
-    stig.appendChild(d);
-  });
-  if (s === -1 && u.stoda) {
-    const d = document.createElement("div");
-    d.className = "nu";
-    d.innerHTML = "<i></i><small></small>";
-    d.querySelector("small").textContent = u.stoda;
-    stig.appendChild(d);
-  }
   void lysing.offsetWidth;
   lysing.classList.add("skift");
 
